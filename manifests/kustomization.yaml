@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - pvc.yaml
+  - deployment.yaml
+  - service.yaml
+
+# Point this at your ECR image. Set newName to the repository URI printed by the
+# workbook (tofu output ecr_repository_url) and newTag to the tag you pushed.
+images:
+  - name: spinifex-demo
+    newName: REPLACE_WITH_ECR_REPOSITORY_URI
+    newTag: latest

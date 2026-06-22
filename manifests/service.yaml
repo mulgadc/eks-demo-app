@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: spinifex-demo
+  namespace: default
+  labels:
+    app: spinifex-demo
+spec:
+  # NodePort matches the workbook's SG rule (node_port, default 30080); the
+  # LBC-provisioned ALB targets the workers on this port.
+  type: NodePort
+  selector:
+    app: spinifex-demo
+  ports:
+    - port: 80
+      targetPort: 8080
+      nodePort: 30080

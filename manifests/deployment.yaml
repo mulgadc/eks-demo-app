@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spinifex-demo
+  namespace: default
+  labels:
+    app: spinifex-demo
+spec:
+  # One replica: the EBS volume is ReadWriteOnce, so the persisted counter is
+  # owned by a single pod. Scale the stateless tiers, not this one.
+  replicas: 1
+  selector:
+    matchLabels:
+      app: spinifex-demo
+  template:
+    metadata:
+      labels:
+        app: spinifex-demo
+    spec:
+      containers:
+        - name: spinifex-demo
+          image: spinifex-demo
+          ports:
+            - containerPort: 8080
+          env:
+            - name: APP_TITLE
+              value: "Spinifex EKS — GitOps"
+            - name: DATA_DIR
+              value: /data
+            - name: CLUSTER_NAME
+              value: eks-gitops
+            - name: AWS_REGION
+              value: ap-southeast-2
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 8080
+            initialDelaySeconds: 3
+            periodSeconds: 10
+          volumeMounts:
+            - name: data
+              mountPath: /data
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: spinifex-demo-data

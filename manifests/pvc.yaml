@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: spinifex-demo-data
+  namespace: default
+  labels:
+    app: spinifex-demo
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+  # storageClassName omitted: the EBS-CSI addon ships a default gp3 StorageClass
+  # (provisioner ebs.csi.aws.com) that provisions a Viperblock-backed EBS volume.
