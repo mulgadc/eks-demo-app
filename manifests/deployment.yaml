@@ -17,6 +17,14 @@ spec:
       labels:
         app: spinifex-demo
     spec:
+      # The image runs as distroless nonroot (UID/GID 65532). fsGroup makes the
+      # EBS-CSI driver chown the mounted volume to that group so the non-root
+      # process can write /data; without it the root-owned ext4 denies writes.
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65532
+        runAsGroup: 65532
+        fsGroup: 65532
       containers:
         - name: spinifex-demo
           image: spinifex-demo
