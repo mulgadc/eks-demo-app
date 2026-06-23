@@ -10,5 +10,5 @@ resources:
 # workbook (tofu output ecr_repository_url) and newTag to the tag you pushed.
 images:
   - name: spinifex-demo
-    newName: 000000000001.dkr.ecr.ap-southeast-2.mulga.internal/spinifex-demo
+    newName: 000000000001.dkr.ecr.ap-southeast-2.spinifex.internal/spinifex-demo
     newTag: latest
